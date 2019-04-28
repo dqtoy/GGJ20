@@ -9,7 +9,7 @@ public class CanvasManager : SingletonBehaviour<CanvasManager>
     public GridsManager grids;
     public GridsManager targerGrids;
     public Brush brush;
-    public const float timePerCell = 0.25f;
+    public const float timePerCell = 2f;
     public const float cellWidth = 1;
 
     public Text debugText;
@@ -18,14 +18,19 @@ public class CanvasManager : SingletonBehaviour<CanvasManager>
     private bool scanning = false;
     private int currentRow;
     private int currentCell;
-    private long rowStartTime;
-    private float rowScanTime;
     private Vector3 brushFrom;
     private Vector3 brushTo;
+    private long startTime;
+    private int totalTimeElapse;
+    private int rowTimeElapse;
+    private int rowStartTime;
     private float progress = 0;
 
-    private float modifiedTimePerCell = 1;
     private bool onEmpty = false;
+
+    private int[] speedModifies;
+    private int[] rowTimesTotal;
+    private int currentRowTime;
 
 
     public void Init(LevelData levelData)
@@ -34,13 +39,29 @@ public class CanvasManager : SingletonBehaviour<CanvasManager>
         height = levelData.height;
         grids.Init(levelData.values);
         targerGrids.Init(levelData.values, true);
+
+        speedModifies = new int[height];
+        rowTimesTotal = new int[height];
+        int totalTime = 0;
+        for (int i = 0; i < height; i++)
+        {
+            speedModifies[i] = (Random.Range(1, 3));
+            float modifiedTimePerCell = timePerCell / speedModifies[currentRow];
+            float rowScanTime = modifiedTimePerCell * (width + 1);
+            rowTimesTotal[i] = (int)(rowScanTime * 1000) + totalTime;
+            totalTime += rowTimesTotal[i];
+        }
     }
 
     public void StartPlay()
     {
         currentRow = 0;
         currentCell = -1;
+        currentRowTime = rowTimesTotal[0];
         PrepareScan();
+        startTime = DateTimeUtil.GetUnixTime();
+        rowStartTime = 0;
+        scanning = true;
     }
 
     public void PrepareScan()
@@ -52,28 +73,20 @@ public class CanvasManager : SingletonBehaviour<CanvasManager>
         brushTo = endTile.position + new Vector3(0.5f, 0, 0);
         brush.transform.position = brushFrom;
 
-        //todo: change speed
-        modifiedTimePerCell = timePerCell / Random.Range(1, 3);
-        rowScanTime = modifiedTimePerCell * (width + 1);
-
         StartScan();
     }
 
     public void StartScan()
     {
         progress = 0;
-        DOTween.To(() => progress, x => progress = x, 1, rowScanTime).SetEase(Ease.Linear).OnComplete(OnRowScanFinish);
-        rowStartTime = DateTimeUtil.GetUnixTime();
-        scanning = true;
     }
 
     public void OnRowScanFinish()
     {
-        scanning = false;
         currentRow++;
         currentCell = currentRow * width - 1;
-
-        //brush reset;
+        currentRowTime = rowTimesTotal[currentRow] - rowTimesTotal[currentRow - 1];
+        rowStartTime = rowTimesTotal[currentRow - 1];
 
         if (currentRow >= height)
         {
@@ -87,9 +100,13 @@ public class CanvasManager : SingletonBehaviour<CanvasManager>
 
     private void Update()
     {
+        if (!scanning)
+            return;
+
+        UpdateProgress();
         UpdateCurrentCell();
 
-        /*
+
         if (onEmpty)
         {
             grids.SetDebugValue(currentCell, false);
@@ -99,12 +116,9 @@ public class CanvasManager : SingletonBehaviour<CanvasManager>
             grids.SetDebugValue(currentCell - 1, false);
             grids.SetDebugValue(currentCell, true);
         }
-        */
 
-        if (scanning)
-        {
-            brush.transform.position = Vector3.Lerp(brushFrom, brushTo, progress);
-        }
+
+        brush.transform.position = Vector3.Lerp(brushFrom, brushTo, progress);
     }
 
     //paint black
@@ -122,26 +136,37 @@ public class CanvasManager : SingletonBehaviour<CanvasManager>
 
     }
 
+    public void UpdateProgress()
+    {
+        totalTimeElapse = DateTimeUtil.MillisecondsElapse(startTime);
+        rowTimeElapse = totalTimeElapse - rowStartTime;
+        progress = (float)rowTimeElapse / currentRowTime;
+
+        if (progress > 1)
+        {
+            OnRowScanFinish();
+        }
+    }
+
     public void UpdateCurrentCell()
     {
-        float timeElapse = (DateTimeUtil.MillisecondsElapse(rowStartTime)) / 1000.0f;
-        int offset = (int)(timeElapse / modifiedTimePerCell);
+        int offset = (int)(progress * (width + 1));
         currentCell = offset + currentRow * width - 1;
         if (offset < 1)
         {
             onEmpty = true;
-            debugText.text = "empty" + "---" + timeElapse.ToString();
+            debugText.text = "empty" + "---" + rowTimeElapse.ToString();
         }
         else if (offset > width)
         {
             onEmpty = true;
             currentCell--;
-            debugText.text = "empty" + "---" + timeElapse.ToString();
+            debugText.text = "empty" + "---" + rowTimeElapse.ToString();
         }
         else
         {
             onEmpty = false;
-            debugText.text = currentCell.ToString() + "---" + timeElapse.ToString();
+            debugText.text = currentCell.ToString() + "---" + rowTimeElapse.ToString();
         }
     }
 

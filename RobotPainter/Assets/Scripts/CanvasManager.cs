@@ -9,7 +9,7 @@ public class CanvasManager : SingletonBehaviour<CanvasManager>
     public GridsManager grids;
     public GridsManager targerGrids;
     public Brush brush;
-    public const float timePerCell = 0.5f;
+    public const float timePerCell = 0.25f;
     public const float cellWidth = 1;
 
     public Text debugText;
@@ -89,7 +89,7 @@ public class CanvasManager : SingletonBehaviour<CanvasManager>
     {
         UpdateCurrentCell();
 
-
+        /*
         if (onEmpty)
         {
             grids.SetDebugValue(currentCell, false);
@@ -99,6 +99,7 @@ public class CanvasManager : SingletonBehaviour<CanvasManager>
             grids.SetDebugValue(currentCell - 1, false);
             grids.SetDebugValue(currentCell, true);
         }
+        */
 
         if (scanning)
         {

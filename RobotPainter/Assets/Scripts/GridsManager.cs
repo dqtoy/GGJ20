@@ -5,7 +5,8 @@ using UnityEngine;
 public class GridsManager : MonoBehaviour
 {
     public List<Transform> grids;
-    public int[] gridvalues;
+    public int[] values;
+    public int[] targetValues;
 
     private void Awake()
     {
@@ -16,17 +17,19 @@ public class GridsManager : MonoBehaviour
         }
     }
 
-    public void Init(int[] values, bool setTile = false)
+    public void Init(int[] targets, bool setTile = false)
     {
-        gridvalues = new int[values.Length];
-        for (int i = 0; i < values.Length; i++)
-            gridvalues[i] = values[i];
+        values = new int[targets.Length];
+        targetValues = new int[targets.Length];
+
+        for (int i = 0; i < targets.Length; i++)
+            targetValues[i] = targets[i];
 
         if (setTile)
         {
-            for(int i = 0; i < values.Length; i++)
+            for(int i = 0; i < targets.Length; i++)
             {
-                if (values[i] == 1)
+                if (targets[i] == 1)
                     SetValue(i);
             }
         }
@@ -34,19 +37,19 @@ public class GridsManager : MonoBehaviour
 
     public void SetValue(int idx, int value = 1)
     {
-        if (idx >= gridvalues.Length)
+        if (idx >= values.Length)
         {
             Debug.LogError("index exceeds");
             return;
         }
 
-        gridvalues[idx] = value;
+        values[idx] = value;
         grids[idx].GetComponent<SpriteRenderer>().color = new Color(0,0,0,1);
     }
 
     public void SetDebugValue(int idx, bool on)
     {
-        if (idx < 0)
+        if (idx < 0 || idx >= grids.Count)
             return;
 
         grids[idx].GetComponent<SpriteRenderer>().color = on ? new Color(1, 0, 0, 1) : new Color(1, 1, 1, 1);
@@ -54,12 +57,28 @@ public class GridsManager : MonoBehaviour
 
     public Transform GetTile(int idx)
     {
-        if (idx >= gridvalues.Length)
+        if (idx >= values.Length)
         {
             Debug.LogError("index exceeds");
             return null;
         }
 
         return grids[idx];
+    }
+
+    public int GetScore()
+    {
+        int score = 0;
+        for(int i = 0; i < values.Length; i++)
+        {
+            if (targetValues[i] == 1 && values[i] == 1)
+                score++;
+
+            if ((targetValues[i] == 1 && values[i] == 0) ||
+            (targetValues[i] == 0 && values[i] == 1))
+                score--;
+        }
+
+        return score;
     }
 }

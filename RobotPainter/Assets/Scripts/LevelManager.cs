@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public enum LevelStatus
 {
@@ -12,6 +13,8 @@ public class LevelManager : SingletonBehaviour<LevelManager>
     public LevelData currentLevel;
     public LevelStatus levelStatus;
     public long levelStartTime;
+
+    public Text Score;
 
     public void LoadLevel()
     {
@@ -28,12 +31,14 @@ public class LevelManager : SingletonBehaviour<LevelManager>
     {
         levelStatus = LevelStatus.Play;
         levelStartTime = DateTimeUtil.GetUnixTimeMilliseconds();
+        CanvasManager.Instance.StartPlay();
     }
 
     public void CheckResult()
     {
         levelStatus = LevelStatus.CheckResult;
-
+        int score = CanvasManager.Instance.grids.GetScore();
+        Score.text = score.ToString();
     }
 
     public void EndLevel()

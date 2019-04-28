@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-
 public enum GameStatus
 {
     Title, Credits, Level
@@ -34,7 +33,10 @@ public class GameManager : SingletonBehaviour<GameManager>
     {
         if (LevelManager.Instance.levelStatus == LevelStatus.CheckResult)
         {
-            LevelManager.Instance.LoadLevel();
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                LevelManager.Instance.LoadLevel();
+            }
             return;
         }
 

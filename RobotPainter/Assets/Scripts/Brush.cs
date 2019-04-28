@@ -4,12 +4,10 @@ using UnityEngine;
 
 public class Brush : SingletonBehaviour<Brush>
 {
-    private void Update()
-    {
+    public PulseAnimation effect;
 
-    }
     public void PlayPaint()
     {
-
+        effect.Play();
     }
 }

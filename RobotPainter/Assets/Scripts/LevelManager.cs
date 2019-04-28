@@ -13,22 +13,15 @@ public class LevelManager : SingletonBehaviour<LevelManager>
     public LevelStatus levelStatus;
     public long levelStartTime;
 
-    private void Awake()
-    {
-
-    }
-
-    private void Update()
-    {
-
-    }
-
     public void LoadLevel()
     {
+        levelStatus = LevelStatus.Load;
         int previousLevelId = (currentLevel == null) ? -1 : currentLevel.id;
         currentLevel = LevelService.Instance.GetLevel(previousLevelId);
 
         CanvasManager.Instance.Init(currentLevel);
+
+        StartLevel();
     }
 
     public void StartLevel()
@@ -39,6 +32,7 @@ public class LevelManager : SingletonBehaviour<LevelManager>
 
     public void CheckResult()
     {
+        levelStatus = LevelStatus.CheckResult;
 
     }
 

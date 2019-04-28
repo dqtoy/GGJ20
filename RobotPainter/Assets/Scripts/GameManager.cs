@@ -10,12 +10,12 @@ public enum GameStatus
 
 public class GameManager : SingletonBehaviour<GameManager>
 {
-    public GameStatus gameStatus = GameStatus.Level;
+    public GameStatus gameStatus = GameStatus.Title;
 
     public void Update()
     {
-        if (gameStatus == GameStatus.Level)
-            HandleInput_Level();
+        if (gameStatus == GameStatus.Title)
+            HandleInput_Title();
 
         if (gameStatus == GameStatus.Level)
             HandleInput_Level();
@@ -26,19 +26,29 @@ public class GameManager : SingletonBehaviour<GameManager>
         if (Input.GetKeyDown(KeyCode.Space))
         {
             LevelManager.Instance.LoadLevel();
+            gameStatus = GameStatus.Level;
         }
     }
 
     private void HandleInput_Level()
     {
-        if (Input.GetKeyDown(KeyCode.J))
+        if (LevelManager.Instance.levelStatus == LevelStatus.CheckResult)
         {
-            CanvasManager.Instance.ActionA();
+            LevelManager.Instance.LoadLevel();
+            return;
         }
 
-        if (Input.GetKeyDown(KeyCode.K))
+        if (LevelManager.Instance.levelStatus == LevelStatus.Play)
         {
-            CanvasManager.Instance.ActionB();
+            if (Input.GetKeyDown(KeyCode.J))
+            {
+                CanvasManager.Instance.ActionA();
+            }
+
+            if (Input.GetKeyDown(KeyCode.K))
+            {
+                CanvasManager.Instance.ActionB();
+            }
         }
     }
 }

@@ -20,31 +20,29 @@ public class LevelService : SingletonBehaviour<LevelService>
         LevelData level = new LevelData();
         level.id = 0;
         level.width = 7;
-        level.height = 8;
-        level.values = new int[56] {
+        level.height = 6;
+        level.values = new int[42] {
         0,0,0,0,0,0,0,
         0,1,1,0,1,1,0,
-        0,1,1,0,1,1,0,
+        0,0,1,0,1,0,0,
         0,0,0,1,0,0,0,
-        0,0,0,1,0,0,0,
-        0,1,0,0,0,1,0,
         0,1,1,1,1,1,0,
-        0,0,0,0,0,0,0};
+        0,0,0,0,0,0,0
+        };
         levels.Add(level);
 
         level = new LevelData();
         level.id = 1;
         level.width = 7;
-        level.height = 8;
-        level.values = new int[56] {
+        level.height = 6;
+        level.values = new int[42] {
         0,0,0,0,0,0,0,
-        0,0,1,0,1,0,0,
-        0,1,1,1,1,1,0,
+        0,1,1,0,1,1,0,
+        0,1,1,0,1,1,0,
         0,0,0,1,0,0,0,
-        0,0,0,1,0,0,0,
-        0,1,0,0,0,1,0,
-        0,1,1,1,1,1,0,
-        0,1,0,0,0,1,0};
+        1,0,0,0,0,0,1,
+        0,1,1,1,1,1,0
+        };
         levels.Add(level);
 
 

@@ -11,7 +11,7 @@ public class RhythmManager : SingletonBehaviour<RhythmManager>
     public static event BGBeatOdd OnBGBeatOdd;
 
     public delegate void BGBeatEven();
-    public static event BGBeatOdd OnBGBeatEven;
+    public static event BGBeatEven OnBGBeatEven;
 
     public int beatTime;
     public int offset; 
@@ -52,14 +52,16 @@ public class RhythmManager : SingletonBehaviour<RhythmManager>
             lastBeat = beat;
             BGBeatOccur();
 
+            /*
             if (beat % 2 == 1)
             {
-                OnBGBeatOdd();
+                BGBeatOccurOdd();
             }
             else
             {
-                OnBGBeatEven();
+                BGBeatOccurEven();
             }
+            */
         }
     }
 

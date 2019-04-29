@@ -4,16 +4,19 @@ using UnityEngine;
 
 public class GridsManager : MonoBehaviour
 {
-    public List<Transform> grids;
+    public List<SpriteRenderer> grids;
     public int[] values;
     public int[] targetValues;
 
+    private int width = 7;
+    private int height = 6;
+
     private void Awake()
     {
-        grids = new List<Transform>();
+        grids = new List<SpriteRenderer>();
         foreach (Transform child in transform)
         {
-            grids.Add(child);
+            grids.Add(child.GetComponent<SpriteRenderer>());
         }
     }
 
@@ -29,8 +32,7 @@ public class GridsManager : MonoBehaviour
         {
             for(int i = 0; i < targets.Length; i++)
             {
-                if (targets[i] == 1)
-                    SetValue(i);
+                SetValue(i, targets[i]);
             }
         }
     }
@@ -54,11 +56,11 @@ public class GridsManager : MonoBehaviour
         else if (style == 2)
         {
             bool flip = true;
-            for (int i = 0; i < 8; i++)
+            for (int i = 0; i < height; i++)
             {
-                for (int j = 0; j < 7; j++)
+                for (int j = 0; j < width; j++)
                 {
-                    SetValue(i * 7 + j, flip ? 1 : 0);
+                    SetValue(i * width + j, flip ? 1 : 0);
                 }
                 flip = !flip;
             }
@@ -74,8 +76,9 @@ public class GridsManager : MonoBehaviour
         }
 
         values[idx] = value;
-        Color newC = (value == 1) ? new Color(0, 0, 0, 1) : new Color(1, 1, 1, 1);
-        grids[idx].GetComponent<SpriteRenderer>().color = newC;
+        //Color newC = (value == 1) ? new Color(0, 0, 0, 1) : new Color(1, 1, 1, 1);
+        //grids[idx].GetComponent<SpriteRenderer>().color = newC;
+        grids[idx].enabled = value == 1;
     }
 
     public void SetDebugValue(int idx, bool on)
@@ -83,7 +86,8 @@ public class GridsManager : MonoBehaviour
         if (idx < 0 || idx >= grids.Count)
             return;
 
-        grids[idx].GetComponent<SpriteRenderer>().color = on ? new Color(1, 0, 0, 1) : new Color(1, 1, 1, 1);
+        //grids[idx].GetComponent<SpriteRenderer>().color = on ? new Color(1, 0, 0, 1) : new Color(1, 1, 1, 1);
+        grids[idx].enabled = on;
     }
 
     public Transform GetTile(int idx)
@@ -94,7 +98,7 @@ public class GridsManager : MonoBehaviour
             return null;
         }
 
-        return grids[idx];
+        return grids[idx].transform;
     }
 
     public int GetScore()

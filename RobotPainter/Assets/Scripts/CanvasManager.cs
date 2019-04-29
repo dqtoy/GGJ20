@@ -45,7 +45,7 @@ public class CanvasManager : SingletonBehaviour<CanvasManager>
         width = levelData.width;
         height = levelData.height;
         grids.Init(levelData.values, false);
-        grids.SetPattern();
+        grids.SetPattern(0);
         targerGrids.Init(levelData.values, true);
 
         speedModifies = new int[height];
@@ -68,7 +68,7 @@ public class CanvasManager : SingletonBehaviour<CanvasManager>
         currentCell = -1;
         currentRowTime = rowTimesTotal[0];
         PrepareScan();
-        startTime = RhythmManager.Instance.GetNextBeatTime();
+        startTime = RhythmManager.Instance.GetNextOddBeatTime();
         rowStartTime = 0;
         scanning = true;
     }
@@ -141,6 +141,7 @@ public class CanvasManager : SingletonBehaviour<CanvasManager>
 
         Brush.Instance.PlayPaint();
         grids.SetValue(currentCell);
+        MusicManager.Instance.PlayDraw();
     }
 
     public void ActionB()
@@ -150,6 +151,7 @@ public class CanvasManager : SingletonBehaviour<CanvasManager>
 
         Brush.Instance.PlayPaint();
         grids.SetValue(currentCell, 0);
+        MusicManager.Instance.PlayErase();
     }
 
     public void UpdateProgress()

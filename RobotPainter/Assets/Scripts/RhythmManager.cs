@@ -7,6 +7,12 @@ public class RhythmManager : SingletonBehaviour<RhythmManager>
     public delegate void BGBeat();
     public static event BGBeat OnBGBeat;
 
+    public delegate void BGBeatOdd();
+    public static event BGBeatOdd OnBGBeatOdd;
+
+    public delegate void BGBeatEven();
+    public static event BGBeatOdd OnBGBeatEven;
+
     public int beatTime;
     public int offset; 
 
@@ -22,6 +28,16 @@ public class RhythmManager : SingletonBehaviour<RhythmManager>
         OnBGBeat();
     }
 
+    public static void BGBeatOccurOdd()
+    {
+        OnBGBeatOdd();
+    }
+
+    public static void BGBeatOccurEven()
+    {
+        OnBGBeatEven();
+    }
+
     public void Reset()
     {
         lastBeat = 0;
@@ -35,6 +51,15 @@ public class RhythmManager : SingletonBehaviour<RhythmManager>
         {
             lastBeat = beat;
             BGBeatOccur();
+
+            if (beat % 2 == 1)
+            {
+                OnBGBeatOdd();
+            }
+            else
+            {
+                OnBGBeatEven();
+            }
         }
     }
 
@@ -44,6 +69,16 @@ public class RhythmManager : SingletonBehaviour<RhythmManager>
         timeElapse = MusicManager.Instance.GetBGTime() + offset;
         int currentBeat = timeElapse / beatTime;
         int till = (currentBeat + 1) * beatTime - timeElapse;
+        return nowTime + till;
+    }
+
+    public long GetNextOddBeatTime()
+    {
+        long nowTime = DateTimeUtil.GetUnixTimeMilliseconds();
+        timeElapse = MusicManager.Instance.GetBGTime() + offset;
+        int currentBeat = timeElapse / beatTime;
+        int offBeat = ((currentBeat % 2) == 0) ? 2 : 1;
+        int till = (currentBeat + offBeat) * beatTime - timeElapse;
         return nowTime + till;
     }
 

@@ -35,13 +35,32 @@ public class GridsManager : MonoBehaviour
         }
     }
 
-    public void SetPattern()
+    public void SetPattern(int style)
     {
-        for (int i = 1; i < 8; i += 1)
+        if (style == 0)
         {
-            for(int j = 0; j < 7; j++)
+            for (int i = 0; i < values.Length; i++)
             {
-                SetValue(i * 7 + j, 1);
+                SetValue(i, 0);
+            }
+        }
+        else if (style == 1)
+        {
+            for (int i = 0; i < values.Length; i++)
+            {
+                SetValue(i, 1);
+            }
+        }
+        else if (style == 2)
+        {
+            bool flip = true;
+            for (int i = 0; i < 8; i++)
+            {
+                for (int j = 0; j < 7; j++)
+                {
+                    SetValue(i * 7 + j, flip ? 1 : 0);
+                }
+                flip = !flip;
             }
         }
     }

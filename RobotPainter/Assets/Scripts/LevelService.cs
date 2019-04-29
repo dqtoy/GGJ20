@@ -45,6 +45,20 @@ public class LevelService : SingletonBehaviour<LevelService>
         };
         levels.Add(level);
 
+        level = new LevelData();
+        level.id = 2;
+        level.width = 7;
+        level.height = 6;
+        level.values = new int[42] {
+        0,0,1,0,1,0,0,
+        0,1,1,1,1,1,0,
+        0,1,1,0,1,1,0,
+        0,0,0,1,0,0,0,
+        0,0,1,1,0,0,0,
+        1,1,1,1,1,1,1
+        };
+        levels.Add(level);
+
 
     }
 

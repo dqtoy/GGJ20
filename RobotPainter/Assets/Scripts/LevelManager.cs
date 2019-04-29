@@ -12,7 +12,8 @@ public class LevelManager : SingletonBehaviour<LevelManager>
 {
     public LevelData currentLevel;
     public LevelStatus levelStatus;
-    //public long levelStartTime;
+    public int level = 0;
+
 
     public Text Score;
 
@@ -22,7 +23,9 @@ public class LevelManager : SingletonBehaviour<LevelManager>
         int previousLevelId = (currentLevel == null) ? -1 : currentLevel.id;
         currentLevel = LevelService.Instance.GetLevel(previousLevelId);
 
-        CanvasManager.Instance.Init(currentLevel);
+        level++;
+        bool withHelp = (level < 5);
+        CanvasManager.Instance.Init(currentLevel, withHelp);
         StartLevel();
     }
 

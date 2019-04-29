@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class CanvasManager : SingletonBehaviour<CanvasManager>
 {
     public GridsManager grids;
+    public Transform helpGrids;
     public GridsManager targerGrids;
     public Brush brush;
     public const float timePerCell = 0.572f;
@@ -40,13 +41,14 @@ public class CanvasManager : SingletonBehaviour<CanvasManager>
         targetPulse = targerGrids.GetComponent<PulseAnimation>();
     }
 
-    public void Init(LevelData levelData)
+    public void Init(LevelData levelData, bool withHelpGrids)
     {
         width = levelData.width;
         height = levelData.height;
         grids.Init(levelData.values, false);
         grids.SetPattern(0);
         targerGrids.Init(levelData.values, true);
+        helpGrids.gameObject.SetActive(withHelpGrids);
 
         speedModifies = new int[height];
         rowTimesTotal = new int[height];

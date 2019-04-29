@@ -10,6 +10,7 @@ public enum GameStatus
 public class GameManager : SingletonBehaviour<GameManager>
 {
     public GameStatus gameStatus = GameStatus.Title;
+    public bool debug = false;
 
     public void Update()
     {

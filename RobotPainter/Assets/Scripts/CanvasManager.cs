@@ -9,7 +9,7 @@ public class CanvasManager : SingletonBehaviour<CanvasManager>
     public GridsManager grids;
     public GridsManager targerGrids;
     public Brush brush;
-    public const float timePerCell = 2f;
+    public const float timePerCell = 0.5f;
     public const float cellWidth = 1;
 
     public Text debugText;
@@ -46,10 +46,11 @@ public class CanvasManager : SingletonBehaviour<CanvasManager>
         for (int i = 0; i < height; i++)
         {
             speedModifies[i] = (Random.Range(1, 3));
-            float modifiedTimePerCell = timePerCell / speedModifies[currentRow];
-            float rowScanTime = modifiedTimePerCell * (width + 1);
-            rowTimesTotal[i] = (int)(rowScanTime * 1000) + totalTime;
-            totalTime += rowTimesTotal[i];
+            float modifiedTimePerCell = timePerCell / speedModifies[i];
+            int rowScanTime = (int)(modifiedTimePerCell * (width + 1) * 1000);
+            int preTotal = (i == 0) ? 0 : rowTimesTotal[i - 1];
+            rowTimesTotal[i] = rowScanTime + preTotal;
+            totalTime += rowScanTime;
         }
     }
 
@@ -83,16 +84,17 @@ public class CanvasManager : SingletonBehaviour<CanvasManager>
 
     public void OnRowScanFinish()
     {
-        currentRow++;
-        currentCell = currentRow * width - 1;
-        currentRowTime = rowTimesTotal[currentRow] - rowTimesTotal[currentRow - 1];
-        rowStartTime = rowTimesTotal[currentRow - 1];
-
-        if (currentRow >= height)
+        //check finish
+        if (currentRow >= height - 1)
         {
             LevelManager.Instance.CheckResult();
             return;
         }
+
+        currentRow++;
+        currentCell = currentRow * width - 1;
+        currentRowTime = rowTimesTotal[currentRow] - rowTimesTotal[currentRow - 1];
+        rowStartTime = rowTimesTotal[currentRow - 1];
 
         PrepareScan();
     }
@@ -106,15 +108,17 @@ public class CanvasManager : SingletonBehaviour<CanvasManager>
         UpdateProgress();
         UpdateCurrentCell();
 
-
-        if (onEmpty)
+        if (GameManager.Instance.debug)
         {
-            grids.SetDebugValue(currentCell, false);
-        }
-        else
-        {
-            grids.SetDebugValue(currentCell - 1, false);
-            grids.SetDebugValue(currentCell, true);
+            if (onEmpty)
+            {
+                grids.SetDebugValue(currentCell, false);
+            }
+            else
+            {
+                grids.SetDebugValue(currentCell - 1, false);
+                grids.SetDebugValue(currentCell, true);
+            }
         }
 
 
@@ -150,7 +154,9 @@ public class CanvasManager : SingletonBehaviour<CanvasManager>
 
     public void UpdateCurrentCell()
     {
-        int offset = (int)(progress * (width + 1));
+        float halfCell = 1.0f / (width + 1);
+        float adjustedProcess = progress + halfCell / 2;
+        int offset = (int)(adjustedProcess * (width + 1));
         currentCell = offset + currentRow * width - 1;
         if (offset < 1)
         {

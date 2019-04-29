@@ -27,6 +27,7 @@ public class GameManager : SingletonBehaviour<GameManager>
         {
             LevelManager.Instance.LoadLevel();
             gameStatus = GameStatus.Level;
+            MusicManager.Instance.PlayBGMusic();
         }
     }
 

@@ -35,6 +35,17 @@ public class GridsManager : MonoBehaviour
         }
     }
 
+    public void SetPattern()
+    {
+        for (int i = 1; i < 8; i += 1)
+        {
+            for(int j = 0; j < 7; j++)
+            {
+                SetValue(i * 7 + j, 1);
+            }
+        }
+    }
+
     public void SetValue(int idx, int value = 1)
     {
         if (idx >= values.Length)
@@ -44,7 +55,8 @@ public class GridsManager : MonoBehaviour
         }
 
         values[idx] = value;
-        grids[idx].GetComponent<SpriteRenderer>().color = new Color(0,0,0,1);
+        Color newC = (value == 1) ? new Color(0, 0, 0, 1) : new Color(1, 1, 1, 1);
+        grids[idx].GetComponent<SpriteRenderer>().color = newC;
     }
 
     public void SetDebugValue(int idx, bool on)

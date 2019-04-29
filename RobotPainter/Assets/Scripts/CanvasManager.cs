@@ -9,7 +9,7 @@ public class CanvasManager : SingletonBehaviour<CanvasManager>
     public GridsManager grids;
     public GridsManager targerGrids;
     public Brush brush;
-    public const float timePerCell = 0.5f;
+    public const float timePerCell = 0.572f;
     public const float cellWidth = 1;
 
     public Text debugText;
@@ -33,11 +33,19 @@ public class CanvasManager : SingletonBehaviour<CanvasManager>
     private int currentRowTime;
 
 
+    private PulseAnimation targetPulse;
+
+    private void Awake()
+    {
+        targetPulse = targerGrids.GetComponent<PulseAnimation>();
+    }
+
     public void Init(LevelData levelData)
     {
         width = levelData.width;
         height = levelData.height;
-        grids.Init(levelData.values);
+        grids.Init(levelData.values, false);
+        grids.SetPattern();
         targerGrids.Init(levelData.values, true);
 
         speedModifies = new int[height];
@@ -60,7 +68,7 @@ public class CanvasManager : SingletonBehaviour<CanvasManager>
         currentCell = -1;
         currentRowTime = rowTimesTotal[0];
         PrepareScan();
-        startTime = DateTimeUtil.GetUnixTime();
+        startTime = RhythmManager.Instance.GetNextBeatTime();
         rowStartTime = 0;
         scanning = true;
     }
@@ -137,12 +145,16 @@ public class CanvasManager : SingletonBehaviour<CanvasManager>
 
     public void ActionB()
     {
+        if (onEmpty)
+            return;
 
+        Brush.Instance.PlayPaint();
+        grids.SetValue(currentCell, 0);
     }
 
     public void UpdateProgress()
     {
-        totalTimeElapse = DateTimeUtil.MillisecondsElapse(startTime);
+        totalTimeElapse = DateTimeUtil.MillisecondsElapseFromMilliseconds(startTime);
         rowTimeElapse = totalTimeElapse - rowStartTime;
         progress = (float)rowTimeElapse / currentRowTime;
 

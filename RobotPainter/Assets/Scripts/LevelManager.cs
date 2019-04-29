@@ -12,7 +12,7 @@ public class LevelManager : SingletonBehaviour<LevelManager>
 {
     public LevelData currentLevel;
     public LevelStatus levelStatus;
-    public long levelStartTime;
+    //public long levelStartTime;
 
     public Text Score;
 
@@ -23,14 +23,12 @@ public class LevelManager : SingletonBehaviour<LevelManager>
         currentLevel = LevelService.Instance.GetLevel(previousLevelId);
 
         CanvasManager.Instance.Init(currentLevel);
-
         StartLevel();
     }
 
     public void StartLevel()
     {
         levelStatus = LevelStatus.Play;
-        levelStartTime = DateTimeUtil.GetUnixTimeMilliseconds();
         CanvasManager.Instance.StartPlay();
     }
 

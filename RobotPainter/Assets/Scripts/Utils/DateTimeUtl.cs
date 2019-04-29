@@ -11,9 +11,19 @@ public class DateTimeUtil
         return epoch.AddSeconds(unixTime);
     }
 
+    public static DateTime FromUnitTimeMilliseconds(long unixTimeMilliseconds)
+    {
+        return epoch.AddMilliseconds(unixTimeMilliseconds);
+    }
+
     public static int MillisecondsElapse(long unixTime)
     {
         return (int)(DateTime.UtcNow - FromUnixTime(unixTime)).TotalMilliseconds;
+    }
+
+    public static int MillisecondsElapseFromMilliseconds(long unixTimeMilliseconds)
+    {
+        return (int)(DateTime.UtcNow - FromUnitTimeMilliseconds(unixTimeMilliseconds)).TotalMilliseconds;
     }
 
     public static int SecondsElapse(long unixTime)

@@ -33,6 +33,8 @@ public class CanvasManager : SingletonBehaviour<CanvasManager>
     private int[] rowTimesTotal;
     private int currentRowTime;
 
+    private bool finished = false;
+
 
     private PulseAnimation targetPulse;
 
@@ -55,7 +57,7 @@ public class CanvasManager : SingletonBehaviour<CanvasManager>
         int totalTime = 0;
         for (int i = 0; i < height; i++)
         {
-            speedModifies[i] = (Random.Range(1, 3));
+            speedModifies[i] = (Random.Range(2, 3));
             float modifiedTimePerCell = timePerCell / speedModifies[i];
             int rowScanTime = (int)(modifiedTimePerCell * (width + 1) * 1000);
             int preTotal = (i == 0) ? 0 : rowTimesTotal[i - 1];
@@ -78,12 +80,18 @@ public class CanvasManager : SingletonBehaviour<CanvasManager>
 
     public void ShowChecking()
     {
-        LevelData testData = LevelService.Instance.NO;
+        LevelData testData = LevelService.Instance.Checking;
         targerGrids.Init(testData.values, true);
+    }
+
+    public void ShowEmpty()
+    {
+        targerGrids.SetPattern(0);
     }
 
     public void StartPlay()
     {
+        finished = false;
         currentRow = 0;
         currentCell = -1;
         currentRowTime = rowTimesTotal[0];
@@ -115,6 +123,7 @@ public class CanvasManager : SingletonBehaviour<CanvasManager>
         //check finish
         if (currentRow >= height - 1)
         {
+            finished = true;
             LevelManager.Instance.CheckResult();
             return;
         }
@@ -130,6 +139,9 @@ public class CanvasManager : SingletonBehaviour<CanvasManager>
 
     private void Update()
     {
+        if (finished)
+            return;
+
         if (!scanning)
             return;
 

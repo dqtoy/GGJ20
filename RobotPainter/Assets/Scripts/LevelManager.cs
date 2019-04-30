@@ -17,6 +17,9 @@ public class LevelManager : SingletonBehaviour<LevelManager>
 
     public Text levelText;
 
+    private int score;
+    private int totalScore;
+
     public void LoadLevel()
     {
         levelStatus = LevelStatus.Load;
@@ -38,39 +41,49 @@ public class LevelManager : SingletonBehaviour<LevelManager>
 
     public void CheckResult()
     {
+        if (levelStatus == LevelStatus.CheckResult)
+            return;
+
         levelStatus = LevelStatus.CheckResult;
         CanvasManager.Instance.ShowChecking();
-        int till = RhythmManager.Instance.GetTillNextOddBeatTime() / 1000;
+        int till = RhythmManager.Instance.GetTillNextQuaterBeatTime() / 1000;
         Invoke("ShowScore", till);
     }
 
     public void ShowScore()
     {
-        int score = CanvasManager.Instance.grids.GetScore();
-        int totalScore = CanvasManager.Instance.grids.GetTotalScore();
+        score = CanvasManager.Instance.grids.GetScore();
+        totalScore = CanvasManager.Instance.grids.GetTotalScore();
         float s = (float)score / totalScore;
         if (s > 0.6f)
         {
             CanvasManager.Instance.ShowOK();
-            CheckOut(score);
+
+            int till = RhythmManager.Instance.GetTillNextQuaterBeatTime() / 1000;
+            Invoke("CheckOut", till);
         }
         else
         {
             CanvasManager.Instance.ShowNO();
-            EndLevel();
+
+            int till = RhythmManager.Instance.GetTillNextDoubleQuaterBeatTime() / 1000;
+            Invoke("EndLevel", till);
         }
     }
 
-    public void CheckOut(int score)
+    public void CheckOut()
     {
         levelStatus = LevelStatus.Checkout;
         HealthManager.Instance.AddHealth(score);
-        LevelManager.Instance.LoadLevel();
+        int till = RhythmManager.Instance.GetTillNextDoubleQuaterBeatTime() / 1000;
+        Invoke("LoadLevel", till);
     }
 
     public void EndLevel()
     {
         levelStatus = LevelStatus.Fail;
+        CanvasManager.Instance.ShowEmpty();
+        GameManager.Instance.RestartText.gameObject.SetActive(true);
     }
 
     public void Restart()

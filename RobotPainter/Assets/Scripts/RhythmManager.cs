@@ -94,6 +94,28 @@ public class RhythmManager : SingletonBehaviour<RhythmManager>
         return till;
     }
 
+    public int GetTillNextQuaterBeatTime()
+    {
+        long nowTime = DateTimeUtil.GetUnixTimeMilliseconds();
+        timeElapse = MusicManager.Instance.GetBGTime() + offset;
+        int currentBeat = timeElapse / beatTime;
+        int offBeat = 4 - currentBeat % 4;
+        int till = (currentBeat + offBeat) * beatTime - timeElapse;
+        return till;
+    }
+
+    public int GetTillNextDoubleQuaterBeatTime()
+    {
+        long nowTime = DateTimeUtil.GetUnixTimeMilliseconds();
+        timeElapse = MusicManager.Instance.GetBGTime() + offset;
+        int currentBeat = timeElapse / beatTime;
+        int offBeat = 8 - currentBeat % 8;
+        int till = (currentBeat + offBeat) * beatTime - timeElapse;
+        return till;
+    }
+
+
+
     public int GetLastBeatTime()
     {
         return 0;

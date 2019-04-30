@@ -9,6 +9,8 @@ public enum GameStatus
 
 public class GameManager : SingletonBehaviour<GameManager>
 {
+    public Transform StartText;
+    public Transform RestartText;
     public GameStatus gameStatus = GameStatus.Title;
     public bool debug = false;
 
@@ -25,6 +27,7 @@ public class GameManager : SingletonBehaviour<GameManager>
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
+            StartText.gameObject.SetActive(false);
             LevelManager.Instance.LoadLevel();
             gameStatus = GameStatus.Level;
             MusicManager.Instance.PlayBGMusic();
@@ -51,8 +54,9 @@ public class GameManager : SingletonBehaviour<GameManager>
 
         if (LevelManager.Instance.levelStatus == LevelStatus.Fail)
         {
-            if (Input.GetKeyDown(KeyCode.Space))
+            if (Input.GetKeyDown(KeyCode.R))
             {
+                RestartText.gameObject.SetActive(false);
                 LevelManager.Instance.Restart();
             }
             return;

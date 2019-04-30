@@ -20,7 +20,7 @@ public class FadeInOut : MonoBehaviour
     public float delay;
     public Ease easeType = Ease.Linear;
     public bool pingPong = false;
-
+    public bool autoStart = true;
     public UnityEvent callback;
 
     private bool playing = false;
@@ -30,6 +30,9 @@ public class FadeInOut : MonoBehaviour
     {
         if (callback == null)
             callback = new UnityEvent();
+
+        if (autoStart)
+            Play();
     }
 
     private void Update()

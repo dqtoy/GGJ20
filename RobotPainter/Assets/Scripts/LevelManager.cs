@@ -62,6 +62,7 @@ public class LevelManager : SingletonBehaviour<LevelManager>
             CanvasManager.Instance.ShowOK();
 
             int till = RhythmManager.Instance.GetTillNextQuaterBeatTime() / 1000;
+            score = (int)(score * (1 + s - 0.6f));
             Invoke("CheckOut", till);
         }
         else

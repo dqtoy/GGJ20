@@ -19,7 +19,7 @@ public class ButterFlyManager : SingletonBehaviour<ButterFlyManager>
 
     public void StartSpawn(int level)
     {
-        if (level < 6)
+        if (level < 3)
             return;
 
         if (level < 10)

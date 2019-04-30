@@ -31,6 +31,8 @@ public class LevelManager : SingletonBehaviour<LevelManager>
         bool withHelp = (level < 5);
         CanvasManager.Instance.Init(currentLevel, withHelp);
         StartLevel();
+
+        ButterFlyManager.Instance.StartSpawn(level);
     }
 
     public void StartLevel()

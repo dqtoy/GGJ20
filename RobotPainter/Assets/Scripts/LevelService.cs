@@ -7,6 +7,7 @@ public class LevelData
     public int id;
     public int width, height;
     public int[] values;
+    public bool flip;
 }
 
 public class LevelService : SingletonBehaviour<LevelService>
@@ -62,6 +63,63 @@ public class LevelService : SingletonBehaviour<LevelService>
         1,1,1,1,1,1,1
         };
         levels.Add(level);
+
+        level = new LevelData();
+        level.id = 3;
+        level.width = 7;
+        level.height = 6;
+        level.values = new int[42] {
+        0,0,0,0,0,0,0,
+        0,1,1,1,1,1,0,
+        0,0,1,0,1,0,0,
+        0,0,0,0,0,0,0,
+        0,1,0,1,0,1,0,
+        0,0,1,1,1,0,0
+        };
+        levels.Add(level);
+
+        level = new LevelData();
+        level.id = 4;
+        level.width = 7;
+        level.height = 6;
+        level.values = new int[42] {
+        1,1,1,1,1,1,1,
+        1,0,0,1,0,0,1,
+        1,1,1,1,1,1,1,
+        1,1,1,0,1,1,1,
+        1,1,0,0,0,1,1,
+        1,1,1,1,1,1,1
+        };
+        levels.Add(level);
+
+        level = new LevelData();
+        level.id = 5;
+        level.width = 7;
+        level.height = 6;
+        level.flip = true;
+        level.values = new int[42] {
+        0,0,0,0,0,0,0,
+        0,1,0,0,0,1,0,
+        0,0,0,0,0,0,0,
+        0,0,0,0,0,0,0,
+        0,0,1,1,1,0,0,
+        0,0,0,0,0,0,0
+        };
+        levels.Add(level);
+
+        level = new LevelData();
+        level.id = 6;
+        level.width = 7;
+        level.height = 6;
+        level.values = new int[42] {
+        1,1,1,1,1,1,1,
+        1,0,0,1,0,0,1,
+        1,1,1,1,1,1,1,
+        1,1,0,0,0,1,1,
+        1,1,1,1,1,1,1,
+        1,1,1,1,1,1,1
+        };
+        levels.Add(level);
     }
 
     private void LoadSpecial()
@@ -111,8 +169,36 @@ public class LevelService : SingletonBehaviour<LevelService>
         int randomIdx = currentLevel;
         while(randomIdx == currentLevel)
         {
-            randomIdx = Random.Range(0, levels.Count);
+            int max = levels.Count;
+            if (currentLevel == -1)
+                max = 4;
+
+            randomIdx = Random.Range(0, max);
         }
         return levels[randomIdx];
+    }
+
+
+
+    public int GetPatternByLevel(int level)
+    {
+        int pattern = 0;
+
+        if (level < 6)
+            pattern = 0;
+        else if (level < 10)
+        {
+            pattern = 1;
+        }
+        else if (level < 15)
+        {
+            pattern = Random.Range(1, 3);
+        }
+        else
+        {
+            pattern = Random.Range(0, 3);
+        }
+
+        return pattern;
     }
 }

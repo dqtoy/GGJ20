@@ -45,19 +45,43 @@ public class CanvasManager : SingletonBehaviour<CanvasManager>
 
     public void Init(LevelData levelData, bool withHelpGrids)
     {
+        int level = LevelManager.Instance.level;
+
         width = levelData.width;
         height = levelData.height;
         grids.Init(levelData.values, false);
-        grids.SetPattern(0);
         targerGrids.Init(levelData.values, true);
         helpGrids.gameObject.SetActive(withHelpGrids);
+
+        //difficulty setup
+        int patternStyle = LevelService.Instance.GetPatternByLevel(level);
+        if (levelData.flip)
+            patternStyle = 1;
+        grids.SetPattern(patternStyle);
 
         speedModifies = new int[height];
         rowTimesTotal = new int[height];
         int totalTime = 0;
         for (int i = 0; i < height; i++)
         {
-            speedModifies[i] = (Random.Range(2, 3));
+            if (level < 3)
+                speedModifies[i] = 1;
+            else if (level < 6)
+            {
+                speedModifies[i] = 2;
+            }
+            else if (level < 10)
+            {
+                speedModifies[i] = (Random.Range(2, 3));
+            }
+            else
+            {
+                speedModifies[i] = (Random.Range(2, 3)) * 2;
+            }
+        }
+
+        for (int i = 0; i < height; i++)
+        {
             float modifiedTimePerCell = timePerCell / speedModifies[i];
             int rowScanTime = (int)(modifiedTimePerCell * (width + 1) * 1000);
             int preTotal = (i == 0) ? 0 : rowTimesTotal[i - 1];

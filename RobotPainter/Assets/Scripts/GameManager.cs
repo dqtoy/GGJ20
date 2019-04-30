@@ -11,6 +11,7 @@ public class GameManager : SingletonBehaviour<GameManager>
 {
     public Transform StartText;
     public Transform RestartText;
+    public Transform Tutorial;
     public GameStatus gameStatus = GameStatus.Title;
     public bool debug = false;
 
@@ -28,6 +29,7 @@ public class GameManager : SingletonBehaviour<GameManager>
         if (Input.GetKeyDown(KeyCode.Space))
         {
             StartText.gameObject.SetActive(false);
+            Tutorial.gameObject.SetActive(true);
             LevelManager.Instance.LoadLevel();
             gameStatus = GameStatus.Level;
             MusicManager.Instance.PlayBGMusic();

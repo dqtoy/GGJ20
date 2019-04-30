@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public enum LevelStatus
 {
-    Load, Play, CheckResult, Checkout
+    Load, Play, CheckResult, Checkout, Fail
 }
 
 public class LevelManager : SingletonBehaviour<LevelManager>
@@ -15,7 +15,7 @@ public class LevelManager : SingletonBehaviour<LevelManager>
     public int level = 0;
 
 
-    public Text Score;
+    public Text levelText;
 
     public void LoadLevel()
     {
@@ -24,6 +24,7 @@ public class LevelManager : SingletonBehaviour<LevelManager>
         currentLevel = LevelService.Instance.GetLevel(previousLevelId);
 
         level++;
+        levelText.text = level.ToString();
         bool withHelp = (level < 5);
         CanvasManager.Instance.Init(currentLevel, withHelp);
         StartLevel();
@@ -38,12 +39,44 @@ public class LevelManager : SingletonBehaviour<LevelManager>
     public void CheckResult()
     {
         levelStatus = LevelStatus.CheckResult;
+        CanvasManager.Instance.ShowChecking();
+        int till = RhythmManager.Instance.GetTillNextOddBeatTime() / 1000;
+        Invoke("ShowScore", till);
+    }
+
+    public void ShowScore()
+    {
         int score = CanvasManager.Instance.grids.GetScore();
-        Score.text = score.ToString();
+        int totalScore = CanvasManager.Instance.grids.GetTotalScore();
+        float s = (float)score / totalScore;
+        if (s > 0.6f)
+        {
+            CanvasManager.Instance.ShowOK();
+            CheckOut(score);
+        }
+        else
+        {
+            CanvasManager.Instance.ShowNO();
+            EndLevel();
+        }
+    }
+
+    public void CheckOut(int score)
+    {
+        levelStatus = LevelStatus.Checkout;
+        HealthManager.Instance.AddHealth(score);
+        LevelManager.Instance.LoadLevel();
     }
 
     public void EndLevel()
     {
+        levelStatus = LevelStatus.Fail;
+    }
 
+    public void Restart()
+    {
+        level = 0;
+        levelText.text = level.ToString();
+        LoadLevel();
     }
 }

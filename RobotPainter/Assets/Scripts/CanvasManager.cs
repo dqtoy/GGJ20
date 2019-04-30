@@ -64,6 +64,24 @@ public class CanvasManager : SingletonBehaviour<CanvasManager>
         }
     }
 
+    public void ShowOK()
+    {
+        LevelData testData = LevelService.Instance.OK;
+        targerGrids.Init(testData.values, true);
+    }
+
+    public void ShowNO()
+    {
+        LevelData testData = LevelService.Instance.NO;
+        targerGrids.Init(testData.values, true);
+    }
+
+    public void ShowChecking()
+    {
+        LevelData testData = LevelService.Instance.NO;
+        targerGrids.Init(testData.values, true);
+    }
+
     public void StartPlay()
     {
         currentRow = 0;
@@ -141,6 +159,10 @@ public class CanvasManager : SingletonBehaviour<CanvasManager>
         if (onEmpty)
             return;
 
+        if (HealthManager.Instance.health <= 0)
+            return;
+
+        HealthManager.Instance.AddHealth(-1);
         Brush.Instance.PlayPaint();
         grids.SetValue(currentCell);
         MusicManager.Instance.PlayDraw();
@@ -151,6 +173,10 @@ public class CanvasManager : SingletonBehaviour<CanvasManager>
         if (onEmpty)
             return;
 
+        if (HealthManager.Instance.health <= 0)
+            return;
+
+        HealthManager.Instance.AddHealth(-1);
         Brush.Instance.PlayPaint();
         grids.SetValue(currentCell, 0);
         MusicManager.Instance.PlayErase();

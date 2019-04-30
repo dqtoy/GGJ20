@@ -8,6 +8,7 @@ public class GridsManager : MonoBehaviour
     public int[] values;
     public int[] targetValues;
 
+    private int totalScore;
     private int width = 7;
     private int height = 6;
 
@@ -24,9 +25,13 @@ public class GridsManager : MonoBehaviour
     {
         values = new int[targets.Length];
         targetValues = new int[targets.Length];
+        totalScore = 0;
 
         for (int i = 0; i < targets.Length; i++)
+        {
             targetValues[i] = targets[i];
+            totalScore += targets[i];
+        }
 
         if (setTile)
         {
@@ -115,5 +120,10 @@ public class GridsManager : MonoBehaviour
         }
 
         return score;
+    }
+
+    public int GetTotalScore()
+    {
+        return totalScore;
     }
 }

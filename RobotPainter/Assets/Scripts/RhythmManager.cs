@@ -84,6 +84,16 @@ public class RhythmManager : SingletonBehaviour<RhythmManager>
         return nowTime + till;
     }
 
+    public int GetTillNextOddBeatTime()
+    {
+        long nowTime = DateTimeUtil.GetUnixTimeMilliseconds();
+        timeElapse = MusicManager.Instance.GetBGTime() + offset;
+        int currentBeat = timeElapse / beatTime;
+        int offBeat = ((currentBeat % 2) == 0) ? 2 : 1;
+        int till = (currentBeat + offBeat) * beatTime - timeElapse;
+        return till;
+    }
+
     public int GetLastBeatTime()
     {
         return 0;

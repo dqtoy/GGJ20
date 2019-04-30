@@ -29,15 +29,31 @@ public class GameManager : SingletonBehaviour<GameManager>
             gameStatus = GameStatus.Level;
             MusicManager.Instance.PlayBGMusic();
         }
+
+        if (Input.GetKeyDown(KeyCode.A))
+        {
+            //CanvasManager.Instance.ShowOK();
+        }
     }
 
     private void HandleInput_Level()
     {
+        /*
         if (LevelManager.Instance.levelStatus == LevelStatus.CheckResult)
         {
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 LevelManager.Instance.LoadLevel();
+            }
+            return;
+        }
+        */
+
+        if (LevelManager.Instance.levelStatus == LevelStatus.Fail)
+        {
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                LevelManager.Instance.Restart();
             }
             return;
         }

@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Player : SingletonBehaviour<Player>
 {
+    public Block block;
+    public Vector2 pos;
     public void Move(Vector2 vec)
     {
         

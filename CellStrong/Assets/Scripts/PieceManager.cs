@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PieceGenManager : SingletonBehaviour<PieceGenManager>
+public class PieceManager : SingletonBehaviour<PieceManager>
 {
     public List<GameObject> pieces;
     public List<PieceGenerator> pieceGenerators;
@@ -25,6 +25,12 @@ public class PieceGenManager : SingletonBehaviour<PieceGenManager>
         GameObject obj = Instantiate(pieces[idx]);
         Piece piece = obj.GetComponent<Piece>();
         return piece;
+    }
+
+    public void StartGenerating()
+    {
+        GenerateNext();
+        Release();
     }
 
     public void Release()
@@ -50,5 +56,10 @@ public class PieceGenManager : SingletonBehaviour<PieceGenManager>
 
         if (activePieceCount <= 0)
             Release();
+    }
+
+    public bool IsAnyPieceFalling()
+    {
+        return activePieceCount > 0;
     }
 }

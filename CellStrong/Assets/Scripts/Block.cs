@@ -10,4 +10,5 @@ public enum BlockType
 public class Block : MonoBehaviour
 {
     public BlockType blockType;
+    public int layer;
 }

@@ -17,7 +17,10 @@ public class InputManager : MonoBehaviour
 
     private void PreGameInput()
     {
-
+        if (Input.GetKeyDown(KeyCode.J))
+        {
+            LevelManager.Instance.StartLevel();
+        }
     }
 
     private void PostGameInput()

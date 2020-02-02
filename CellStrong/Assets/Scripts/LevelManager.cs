@@ -12,6 +12,7 @@ public enum LevelStatus
 
 public class LevelManager : SingletonBehaviour<LevelManager>
 {
+    public int levelId;
     public LevelStatus status;
 
     public void Update()
@@ -22,6 +23,15 @@ public class LevelManager : SingletonBehaviour<LevelManager>
 
     public void StartLevel()
     {
+        LoadLevel();
+
         status = LevelStatus.Playing;
+        PlayerManager.Instance.SpawnPlayer();
+        PieceManager.Instance.StartGenerating();
+    }
+
+    private void LoadLevel()
+    {
+
     }
 }

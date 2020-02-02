@@ -25,8 +25,13 @@ public class GridManager : SingletonBehaviour<GridManager>
 
     public void AddBlock(Block block, int x, int y)
     {
+        if (x < 0 || x >= width || y < 0 || y >= height)
+        {
+            Debug.Log("Out of bound");
+            return;
+        }
         grids[x, y] = block;
-        block.transform.SetParent(Player.Instance.transform);
+        block.transform.SetParent(Player.Instance.anchor);
     }
 
     public void RemoveBlock(int x, int y)
@@ -37,6 +42,48 @@ public class GridManager : SingletonBehaviour<GridManager>
     public void RemoveLayer(int layer)
     {
 
+    }
+
+    public void Clear()
+    {
+        for (int i = 0; i < width; i++)
+            for (int j = 0; j < height; j++)
+                grids[i, j] = null;
+    }
+
+    //assume 4 unit direction only
+    public void Rescan()
+    {
+        Clear();
+        foreach (Transform child in Player.Instance.anchor)
+        {
+            Vector2Int pos = GetCoordinate(child.position);
+            grids[pos.x, pos.y] = child.GetComponent<Block>();
+        }
+    }
+    public void Move(Vector2Int offset)
+    {
+        Clear();
+        foreach (Transform child in Player.Instance.anchor)
+        {
+            Vector2Int pos = GetCoordinate(child.position);
+            grids[pos.x, pos.y] = child.GetComponent<Block>();
+        }
+        
+
+        /*
+        if (offset.x == 1)
+        {
+            for(int j = 0; j < height; j++)
+            {
+                for(int i = width - 1; i > 0; i--)
+                {
+                    grids[i, j] = grids[i - 1, j];
+                }
+                grids[0, j] = null;
+            }
+        }
+        */
     }
 
     public bool IsEmpty(int x, int y)

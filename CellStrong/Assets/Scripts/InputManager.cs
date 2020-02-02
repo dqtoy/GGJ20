@@ -17,7 +17,7 @@ public class InputManager : MonoBehaviour
 
     private void PreGameInput()
     {
-        if (Input.GetKeyDown(KeyCode.J))
+        if (Input.GetKeyDown(KeyCode.Space))
         {
             LevelManager.Instance.StartLevel();
         }
@@ -32,15 +32,27 @@ public class InputManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.W))
         {
+            Player.Instance.Move(new Vector2Int(0, 1));
         }
         else if (Input.GetKeyDown(KeyCode.S))
         {
+            Player.Instance.Move(new Vector2Int(0, -1));
         }
         else if (Input.GetKeyDown(KeyCode.A))
         {
+            Player.Instance.Move(new Vector2Int(-1, 0));
         }
         else if (Input.GetKeyDown(KeyCode.D))
         {
+            Player.Instance.Move(new Vector2Int(1, 0));
+        }
+        else if (Input.GetKeyDown(KeyCode.J))
+        {
+            Player.Instance.Rotate(false);
+        }
+        else if (Input.GetKeyDown(KeyCode.K))
+        {
+            Player.Instance.Rotate(true);
         }
     }
 }

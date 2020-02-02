@@ -8,6 +8,7 @@ public class PieceManager : SingletonBehaviour<PieceManager>
     public List<PieceGenerator> pieceGenerators;
 
     public int activePieceCount = 0;
+    public List<Piece> activePieces;
 
     private void OnEnable()
     {
@@ -47,6 +48,9 @@ public class PieceManager : SingletonBehaviour<PieceManager>
         int idx = Random.RandomRange(0, pieceGenerators.Count);
         Piece piece = GenerateRandomPiece();
         pieceGenerators[idx].Spawn(piece);
+
+        activePieces = new List<Piece>();
+        activePieces.Add(piece);
         activePieceCount = 1;
     }
 

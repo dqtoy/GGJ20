@@ -6,25 +6,23 @@ using UnityEngine;
 
 public class RotateAnimation : MonoBehaviour
 {
-    private Vector3 targetRotation;
     private Action callback;
 
-    public void RotateTo(Vector3 targetRotation, Action callback)
+    public void RotateTo(Vector3 rotation, Action callback)
     {
-        this.targetRotation = targetRotation;
         this.callback = callback;
-        Play(targetRotation, false);
+        Play(rotation, false);
     }
 
-    public void Rotate(Vector3 targetRotation, Action callback)
+    public void Rotate(Vector3 rotation, Action callback)
     {
         this.callback = callback;
-        Play(targetRotation, true);
+        Play(rotation, true);
     }
 
     private void Play(Vector3 rotation, bool relative)
     {
-        transform.DOLocalRotate(rotation, 0.2f).SetRelative(relative).OnComplete(OnFinish);
+        transform.DOLocalRotate(rotation, 0.1f).SetRelative(relative).OnComplete(OnFinish);
         //Sequence mySequence = DOTween.Sequence();
         //mySequence.Append(transform.DOLocalMoveY(0.5f, 0.3f).SetRelative(true));
         //mySequence.Append(transform.DOLocalMoveY(-0.5f, 0.3f).SetRelative(true).OnComplete(OnFinish));

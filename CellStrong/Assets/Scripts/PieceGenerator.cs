@@ -28,13 +28,15 @@ public class PieceGenerator : MonoBehaviour
         status = PieceGenStatus.Ready;
     }
 
-    public void Release()
+    public Piece Release()
     {
         if (currentPiece == null)
-            return;
+            return null;
 
+        Piece releasedPiece = currentPiece;
         currentPiece.status = PieceStatus.Moving;
         status = PieceGenStatus.Empty;
         currentPiece = null;
+        return releasedPiece;
     }
 }

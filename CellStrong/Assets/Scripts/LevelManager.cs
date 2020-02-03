@@ -34,4 +34,19 @@ public class LevelManager : SingletonBehaviour<LevelManager>
     {
 
     }
+
+    public bool CanMovePlayer()
+    {
+        return true;
+    }
+
+    public bool CanRotatePlayer()
+    {
+        return true;
+    }
+
+    public bool CanReleasePiece()
+    {
+        return true;
+    }
 }

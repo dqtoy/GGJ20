@@ -10,6 +10,8 @@ public class PieceManager : SingletonBehaviour<PieceManager>
     public int activePieceCount = 0;
     public List<Piece> activePieces;
 
+    private bool readyToRelease = false;
+
     private void OnEnable()
     {
         Piece.OnPieceLand += OnPieceLand;
@@ -18,6 +20,18 @@ public class PieceManager : SingletonBehaviour<PieceManager>
     private void OnDisable()
     {
         Piece.OnPieceLand -= OnPieceLand;
+    }
+
+    private void Update()
+    {
+        if (!readyToRelease)
+            return;
+
+        if (GridManager.Instance.IsBusy())
+            return;
+
+        Release();
+        readyToRelease = false;
     }
 
     public Piece GenerateRandomPiece()
@@ -36,9 +50,16 @@ public class PieceManager : SingletonBehaviour<PieceManager>
 
     public void Release()
     {
-        for (int i = 0; i < pieceGenerators.Count; i++)
-            pieceGenerators[i].Release();
+        activePieces = new List<Piece>();
 
+        for (int i = 0; i < pieceGenerators.Count; i++)
+        {
+            Piece piece = pieceGenerators[i].Release();
+            if (piece != null)
+                activePieces.Add(piece);
+        }
+
+        activePieceCount = activePieces.Count;
         GenerateNext();
     }
 
@@ -48,10 +69,6 @@ public class PieceManager : SingletonBehaviour<PieceManager>
         int idx = Random.RandomRange(0, pieceGenerators.Count);
         Piece piece = GenerateRandomPiece();
         pieceGenerators[idx].Spawn(piece);
-
-        activePieces = new List<Piece>();
-        activePieces.Add(piece);
-        activePieceCount = 1;
     }
 
     public void OnPieceLand()
@@ -59,7 +76,9 @@ public class PieceManager : SingletonBehaviour<PieceManager>
         activePieceCount--;
 
         if (activePieceCount <= 0)
-            Release();
+        {
+            readyToRelease = true;
+        }
     }
 
     public bool IsAnyPieceFalling()

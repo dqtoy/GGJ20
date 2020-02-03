@@ -11,4 +11,5 @@ public class Block : MonoBehaviour
 {
     public BlockType blockType;
     public int layer;
+    public bool toBeCleared = false;
 }

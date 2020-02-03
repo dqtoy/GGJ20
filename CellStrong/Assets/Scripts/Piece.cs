@@ -18,6 +18,8 @@ public class Piece : MonoBehaviour
     public delegate void PieceLand();
     public static event PieceLand OnPieceLand;
 
+    private bool processed = true;
+
     private void OnEnable()
     {
         TickManager.OnTick += OnTick;
@@ -28,13 +30,19 @@ public class Piece : MonoBehaviour
         TickManager.OnTick -= OnTick;
     }
 
+    private void Update()
+    {
+        if (!processed)
+            TryLand();
+    }
+
     private void OnTick()
     {
         if (status == PieceStatus.Freeze)
             return;
 
         bool canMove = NextValid();
-        DebugUI.Instance.nextValid.text = canMove ? "Can Move" : "Can't Move";
+        //DebugUI.Instance.nextValid.text = canMove ? "Can Move" : "Can't Move";
         if (canMove)
         {
             Vector3 newPos = transform.localPosition + direction;
@@ -42,11 +50,23 @@ public class Piece : MonoBehaviour
         }
         else  //land
         {
-            for (int i = 0; i < blocks.Count; i++)
-                GridManager.Instance.AddBlock(blocks[i]);
-            OnPieceLand();
-            Destroy(gameObject);
+            processed = false;
+            TryLand();
         }
+    }
+
+    public void TryLand()
+    {
+        RotateAnimation rotateAnim = Player.Instance.rotAnim;
+        if (rotateAnim != null)
+            return;
+
+        for (int i = 0; i < blocks.Count; i++)
+            GridManager.Instance.AddBlock(blocks[i]);
+        OnPieceLand();
+        Destroy(gameObject);
+        processed = true;
+        GridManager.Instance.TryClear();
     }
 
     private bool NextValid()

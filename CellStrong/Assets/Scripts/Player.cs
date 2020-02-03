@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -14,7 +15,7 @@ public class Player : SingletonBehaviour<Player>
 
     public void Move(Vector2Int vec)
     {
-        if (IsBusy())
+        if (IsBusy() || GridManager.Instance.IsBusy())
             return;
 
         if (!ValideMove(vec))
@@ -29,7 +30,7 @@ public class Player : SingletonBehaviour<Player>
 
     public void Rotate(bool clockwise)
     {
-        if (IsBusy())
+        if (IsBusy() || GridManager.Instance.IsBusy())
             return;
 
         RotateAnimation rotateAnim = GetComponent<RotateAnimation>();
@@ -40,8 +41,6 @@ public class Player : SingletonBehaviour<Player>
         rotAnim = gameObject.AddComponent<RotateAnimation>();
         PushAnimation();
         rotAnim.Rotate(rot, PopAnimation);
-
-        GridManager.Instance.Rescan();
     }
 
     private bool ValideMove(Vector2Int vec)
@@ -74,6 +73,7 @@ public class Player : SingletonBehaviour<Player>
     void PopAnimation()
     {
         animCount--;
+        GridManager.Instance.Rescan();
     }
 
     public bool IsBusy()

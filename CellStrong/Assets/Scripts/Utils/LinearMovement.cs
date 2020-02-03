@@ -16,8 +16,9 @@ public class LinearMovement : MonoBehaviour
     private void Awake()
     {
         if (randomSpin)
-            spinSpeed = Random.RandomRange(-5.0f, 5.0f);
+            spinSpeed = Random.RandomRange(-15.0f, 15.0f);
         root.transform.localScale = Vector3.one * Random.RandomRange(0.5f, 2.0f);
+        time *= 4;
 
         progress = 0;
         DOTween.To(() => progress, x => progress = x, 1, time).SetEase(Ease.Linear).SetLoops(-1, LoopType.Yoyo);

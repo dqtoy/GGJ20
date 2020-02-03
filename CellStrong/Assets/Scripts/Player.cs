@@ -9,9 +9,37 @@ public class Player : SingletonBehaviour<Player>
     public Vector2Int centerXY;
     public Block block;
 
+    [HideInInspector]
     public RotateAnimation rotAnim;
 
+    public Transform rangeObj;
+    public Collider2D cld;
+
+    [Header("Debug")]
+    public SpriteRenderer rangeSprite;
+
+    private float range;
     private int animCount = 0;
+
+    private void Start()
+    {
+        centerXY = GridManager.Instance.GetCoordinate(transform.position);
+    }
+
+    private void Update()
+    {
+        rangeObj.transform.localScale = Vector3.Lerp(rangeObj.transform.localScale, Vector3.one * range, 1.5f * Time.deltaTime);
+        for (int i = 0; i < PieceManager.Instance.activePieces.Count; i++)
+        {
+            if (PieceManager.Instance.activePieces[i] != null
+                && cld.bounds.Contains(PieceManager.Instance.activePieces[i].transform.position))
+            {
+                rangeSprite.color = Color.red;
+                return;
+            }
+        }
+        rangeSprite.color = Color.white;
+    }
 
     public void Move(Vector2Int vec)
     {
@@ -30,7 +58,7 @@ public class Player : SingletonBehaviour<Player>
 
     public void Rotate(bool clockwise)
     {
-        if (IsBusy() || GridManager.Instance.IsBusy())
+        if (IsBusy() || !CanRotate() || GridManager.Instance.IsBusy())
             return;
 
         RotateAnimation rotateAnim = GetComponent<RotateAnimation>();
@@ -65,6 +93,11 @@ public class Player : SingletonBehaviour<Player>
         return true;
     }
 
+    public void UpdateRange(float value)
+    {
+        range = value;
+    }
+
     void PushAnimation()
     {
         animCount++;
@@ -79,5 +112,16 @@ public class Player : SingletonBehaviour<Player>
     public bool IsBusy()
     {
         return (animCount > 0);
+    }
+
+    public bool CanRotate()
+    {
+        for (int i = 0; i < PieceManager.Instance.activePieces.Count; i++)
+        {
+            if (PieceManager.Instance.activePieces[i] != null
+                && cld.bounds.Contains(PieceManager.Instance.activePieces[i].transform.position))
+                return false;
+        }
+        return true;
     }
 }

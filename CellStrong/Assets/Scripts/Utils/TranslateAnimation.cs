@@ -10,23 +10,39 @@ public class TranslateAnimation : MonoBehaviour
 
     public void TranslateTo(Vector3 position, Action callback = null)
     {
-        this.callback = callback;
-        Play(position, false);
+        TranslateTo(position, 0, callback);
     }
 
-    public void Translate(Vector3 position, Action callback = null)
+    public void TranslateTo(Vector3 position, float delay, Action callback = null)
     {
         this.callback = callback;
-        Play(position, true);
+        PlayTranslate(position, delay, false);
     }
 
-    private void Play(Vector3 position, bool relative)
+    public void Translate(Vector3 position, float delay = 0, Action callback = null)
     {
-        transform.DOMove(position, 0.3f).SetRelative(relative).OnComplete(OnFinish);
-        //transform.DOLocalJump(position, 1, 1, 0.1f).SetRelative(relative).OnComplete(OnFinish);
+        this.callback = callback;
+        PlayTranslate(position, delay, true);
+    }
+
+    public void ScaleTo(Vector3 targetScale, Action callback = null)
+    {
+        this.callback = callback;
+        PlayScale(targetScale, false);
+    }
+
+    private void PlayTranslate(Vector3 position, float delay, bool relative)
+    {
+        transform.DOMove(position, 0.3f).SetRelative(relative).SetDelay(delay).OnComplete(OnFinish);
+        //transform.DOJump(position, 1, 1, 0.3f).SetRelative(relative).OnComplete(OnFinish);
         //Sequence mySequence = DOTween.Sequence();
         //mySequence.Append(transform.DOLocalMoveY(0.5f, 0.3f).SetRelative(true));
         //mySequence.Append(transform.DOLocalMoveY(-0.5f, 0.3f).SetRelative(true).OnComplete(OnFinish));
+    }
+
+    private void PlayScale(Vector3 targetScale, bool relative)
+    {
+        transform.DOScale(targetScale, 0.3f).SetRelative(relative).OnComplete(OnFinish);
     }
 
     private void OnFinish()

@@ -19,6 +19,7 @@ public class GridManager : SingletonBehaviour<GridManager>
         Block playerBlock = Player.Instance.block;
         playerBlock.layer = 0;
         AddBlock(playerBlock, 50, 50);
+        Rescan();
     }
 
     private void Update()
@@ -66,9 +67,9 @@ public class GridManager : SingletonBehaviour<GridManager>
 
     public void FallAt(Vector2Int xy, Vector2Int dir, Action callback = null)
     {
-        Debug.Log("Faling at: " + xy);
         int x = xy.x - dir.x;
         int y = xy.y - dir.y;
+        float delay = 0.0f;
 
         while (x >= 0 && x < width && y >= 0 && y < height)
         {
@@ -77,11 +78,12 @@ public class GridManager : SingletonBehaviour<GridManager>
                 //grids[x, y].transform.position = origin.position + new Vector3(x - dir.x, y - dir.y, 0);
                 TranslateAnimation fallAnim = grids[x, y].gameObject.AddComponent<TranslateAnimation>();
                 PushAnimation();
-                fallAnim.TranslateTo(origin.position + new Vector3(x + dir.x, y + dir.y, 0), PopAnimation);
+                fallAnim.TranslateTo(origin.position + new Vector3(x + dir.x, y + dir.y, 0), delay, PopAnimation);
             }
             grids[x + dir.x, y + dir.y] = grids[x, y];
             x = x - dir.x;
             y = y - dir.y;
+            delay += 0.1f;
         }
         grids[x + dir.x, y + dir.y] = null;
 
@@ -92,7 +94,6 @@ public class GridManager : SingletonBehaviour<GridManager>
 
     public void TryClear()
     {
-        Debug.Log("TryClear");
         int x = Player.Instance.centerXY.x;
         int y = Player.Instance.centerXY.y;
         List<Block> toTeRemoved = new List<Block>();
@@ -204,11 +205,15 @@ public class GridManager : SingletonBehaviour<GridManager>
     public void Rescan()
     {
         ClearAll();
+        Vector2Int pos;
+        float maxDist = 0;
         foreach (Transform child in Player.Instance.anchor)
         {
-            Vector2Int pos = GetCoordinate(child.position);
+            pos = GetCoordinate(child.position);
+            maxDist = Mathf.Max(maxDist, Vector2Int.Distance(pos, Player.Instance.centerXY));
             grids[pos.x, pos.y] = child.GetComponent<Block>();
         }
+        Player.Instance.UpdateRange(maxDist + 1);
     }
     public void Move(Vector2Int offset)
     {

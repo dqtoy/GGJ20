@@ -72,6 +72,7 @@ public class GridManager : SingletonBehaviour<GridManager>
         int x = xy.x - dir.x;
         int y = xy.y - dir.y;
         float delay = 0.0f;
+        int newLayer = 0;
 
         while (x >= 0 && x < width && y >= 0 && y < height)
         {
@@ -79,9 +80,15 @@ public class GridManager : SingletonBehaviour<GridManager>
             {
                 //grids[x, y].transform.position = origin.position + new Vector3(x - dir.x, y - dir.y, 0);
                 Block block = grids[x, y];
+                newLayer = Mathf.Max(Mathf.Abs(x + dir.x - Player.Instance.centerXY.x), Mathf.Abs(y + dir.y - Player.Instance.centerXY.y));
+
                 TranslateAnimation fallAnim = block.gameObject.AddComponent<TranslateAnimation>();
                 PushAnimation();
-                fallAnim.TranslateTo(origin.position + new Vector3(x + dir.x, y + dir.y, 0), delay, PopAnimation);
+                fallAnim.TranslateTo(origin.position + new Vector3(x + dir.x, y + dir.y, 0), delay, ()=>
+                {
+                    block.ShiftLayer(-1);
+                    PopAnimation();
+                });
             }
             grids[x + dir.x, y + dir.y] = grids[x, y];
             x = x - dir.x;

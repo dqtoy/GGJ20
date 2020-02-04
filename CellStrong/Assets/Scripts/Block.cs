@@ -15,11 +15,18 @@ public class Block : MonoBehaviour
 
     public void UpdateLayer(int value)
     {
-        Debug.Log(value);
         if (layer == value)
             return;
         layer = value;
         if (layer > 10)
+            layer = 10;
+        sprite.sprite = GridManager.Instance.blockSpries[layer - 1];
+    }
+
+    public void ShiftLayer(int offset)
+    {
+        layer += offset;
+        if(layer > 10)
             layer = 10;
         sprite.sprite = GridManager.Instance.blockSpries[layer - 1];
     }

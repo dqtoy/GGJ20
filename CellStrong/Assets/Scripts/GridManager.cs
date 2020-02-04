@@ -7,6 +7,7 @@ public class GridManager : SingletonBehaviour<GridManager>
 {
     public Transform origin;
     public Collider2D cld;
+    public List<Sprite> blockSpries = new List<Sprite>();
     public Block[,] grids = new Block[101, 101];
     private int width = 101;
     private int height = 101;
@@ -18,7 +19,7 @@ public class GridManager : SingletonBehaviour<GridManager>
     {
         Block playerBlock = Player.Instance.block;
         playerBlock.layer = 0;
-        AddBlock(playerBlock, 50, 50);
+        AddBlock(playerBlock, 10, 10);
         Rescan();
     }
 
@@ -44,6 +45,7 @@ public class GridManager : SingletonBehaviour<GridManager>
             Debug.Log("Out of bound");
             return;
         }
+        block.UpdateLayer(Mathf.Max(Mathf.Abs(Player.Instance.centerXY.x - x), Mathf.Abs(Player.Instance.centerXY.y - y)));
         grids[x, y] = block;
         block.transform.SetParent(Player.Instance.anchor);
     }
@@ -76,7 +78,8 @@ public class GridManager : SingletonBehaviour<GridManager>
             if (grids[x, y] != null)
             {
                 //grids[x, y].transform.position = origin.position + new Vector3(x - dir.x, y - dir.y, 0);
-                TranslateAnimation fallAnim = grids[x, y].gameObject.AddComponent<TranslateAnimation>();
+                Block block = grids[x, y];
+                TranslateAnimation fallAnim = block.gameObject.AddComponent<TranslateAnimation>();
                 PushAnimation();
                 fallAnim.TranslateTo(origin.position + new Vector3(x + dir.x, y + dir.y, 0), delay, PopAnimation);
             }

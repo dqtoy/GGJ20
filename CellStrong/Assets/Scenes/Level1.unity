@@ -1954,6 +1954,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   origin: {fileID: 2014646850}
   cld: {fileID: 945392570}
+  blockSpries:
+  - {fileID: 21300000, guid: 4c4cb17a6fad34f2ca55f13058264e4d, type: 3}
+  - {fileID: 21300000, guid: d7ff898987e9545918becd6a035802ba, type: 3}
+  - {fileID: 21300000, guid: ff5a8299443fc4a969df1859b19c4f0c, type: 3}
+  - {fileID: 21300000, guid: f9ec0c822a2004a43bb9d26b091da596, type: 3}
+  - {fileID: 21300000, guid: 362a5a81c7d884627bf35a528222f1dc, type: 3}
+  - {fileID: 21300000, guid: 4c4cb17a6fad34f2ca55f13058264e4d, type: 3}
+  - {fileID: 21300000, guid: d7ff898987e9545918becd6a035802ba, type: 3}
+  - {fileID: 21300000, guid: ff5a8299443fc4a969df1859b19c4f0c, type: 3}
+  - {fileID: 21300000, guid: f9ec0c822a2004a43bb9d26b091da596, type: 3}
+  - {fileID: 21300000, guid: 362a5a81c7d884627bf35a528222f1dc, type: 3}
 --- !u!61 &945392570
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -2269,6 +2280,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   origin: {fileID: 0}
   cld: {fileID: 0}
+  blockSpries: []
 --- !u!1 &1063743461
 GameObject:
   m_ObjectHideFlags: 0
@@ -2663,7 +2675,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   blockType: 0
   layer: 0
-  toBeCleared: 0
+  sprite: {fileID: 0}
 --- !u!1 &1178966900
 GameObject:
   m_ObjectHideFlags: 0
@@ -3713,7 +3725,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   algo: 0
   quality: 1
-  sigma: 3
+  sigma: 10
 --- !u!114 &1757303693
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4408,6 +4420,8 @@ MonoBehaviour:
   - {fileID: 4588811203236089285, guid: 52454a148c68b431fbbfe026a419e07b, type: 3}
   - {fileID: 3701160540929100615, guid: cb55e303ed37f418f804d7d3164ef792, type: 3}
   - {fileID: 4080795001352420565, guid: 2888ae40d554443e783f4bb65679d87d, type: 3}
+  - {fileID: 7794561342386396417, guid: 3f7911e9cbcaa4b489e6fc1728ae1d34, type: 3}
+  - {fileID: 7794561342386396417, guid: 60ab2a2e0a7d1489cb3c015a0de1c585, type: 3}
   pieceGenerators:
   - {fileID: 548188578}
   - {fileID: 156065955}

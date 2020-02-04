@@ -11,5 +11,16 @@ public class Block : MonoBehaviour
 {
     public BlockType blockType;
     public int layer;
-    public bool toBeCleared = false;
+    public SpriteRenderer sprite;
+
+    public void UpdateLayer(int value)
+    {
+        Debug.Log(value);
+        if (layer == value)
+            return;
+        layer = value;
+        if (layer > 10)
+            layer = 10;
+        sprite.sprite = GridManager.Instance.blockSpries[layer - 1];
+    }
 }

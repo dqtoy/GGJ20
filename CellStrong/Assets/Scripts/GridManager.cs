@@ -8,12 +8,18 @@ public class GridManager : SingletonBehaviour<GridManager>
     public Transform origin;
     public Collider2D cld;
     public List<Sprite> blockSpries = new List<Sprite>();
+    public List<Color> blockColors = new List<Color>();
     public Block[,] grids = new Block[101, 101];
     private int width = 101;
     private int height = 101;
 
     private int animCount = 0;
     private bool needRecheck = false;
+
+    [Header("Particle")]
+    public GameObject removeVFX;
+    public GameObject landingVFX;
+    public GameObject destroyVFX;
 
     public void Init()
     {
@@ -55,14 +61,13 @@ public class GridManager : SingletonBehaviour<GridManager>
         if (block == null)
             return;
 
-        //todo: play particle effect
+        block.Die();
         Vector2Int pos = GetCoordinate(block.transform.position);
         RemoveBlock(pos.x, pos.y);
     }
 
     public void RemoveBlock(int x, int y)
     {
-        //todo: play particle effect
         if (grids[x, y] != null)
             Destroy(grids[x, y].gameObject);
     }
@@ -87,6 +92,7 @@ public class GridManager : SingletonBehaviour<GridManager>
                 fallAnim.TranslateTo(origin.position + new Vector3(x + dir.x, y + dir.y, 0), delay, ()=>
                 {
                     block.ShiftLayer(-1);
+                    block.Land();
                     PopAnimation();
                 });
             }

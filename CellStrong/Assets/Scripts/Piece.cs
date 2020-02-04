@@ -62,7 +62,10 @@ public class Piece : MonoBehaviour
             return;
 
         for (int i = 0; i < blocks.Count; i++)
+        {
             GridManager.Instance.AddBlock(blocks[i]);
+            blocks[i].Land(direction);
+        }
         OnPieceLand();
         Destroy(gameObject);
         processed = true;

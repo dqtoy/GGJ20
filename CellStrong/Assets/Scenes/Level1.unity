@@ -1965,6 +1965,23 @@ MonoBehaviour:
   - {fileID: 21300000, guid: ff5a8299443fc4a969df1859b19c4f0c, type: 3}
   - {fileID: 21300000, guid: f9ec0c822a2004a43bb9d26b091da596, type: 3}
   - {fileID: 21300000, guid: 362a5a81c7d884627bf35a528222f1dc, type: 3}
+  blockColors:
+  - {r: 0, g: 0.7511432, b: 1, a: 1}
+  - {r: 0.68211925, g: 1, b: 0, a: 1}
+  - {r: 1, g: 0.9397521, b: 0, a: 1}
+  - {r: 1, g: 0.4669811, b: 0.7981784, a: 1}
+  - {r: 1, g: 0.25943398, b: 0.46018982, a: 1}
+  - {r: 0, g: 0.72156864, b: 1, a: 1}
+  - {r: 0.64705884, g: 1, b: 0.011764707, a: 1}
+  - {r: 1, g: 0.9294118, b: 0.011764707, a: 1}
+  - {r: 1, g: 0.42352945, b: 0.7725491, a: 1}
+  - {r: 1, g: 0.22352943, b: 0.4156863, a: 1}
+  removeVFX: {fileID: 2007007712668015656, guid: f7ade6cb3b14f4580a131188e916b65b,
+    type: 3}
+  landingVFX: {fileID: 1872717310582924422, guid: d43c3008f21ea4d54992b63fc8de550a,
+    type: 3}
+  destroyVFX: {fileID: 9182049605291539883, guid: 799658dcacb534540809c113457c95e6,
+    type: 3}
 --- !u!61 &945392570
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -2281,6 +2298,10 @@ MonoBehaviour:
   origin: {fileID: 0}
   cld: {fileID: 0}
   blockSpries: []
+  blockColors: []
+  removeVFX: {fileID: 0}
+  landingVFX: {fileID: 0}
+  destroyVFX: {fileID: 0}
 --- !u!1 &1063743461
 GameObject:
   m_ObjectHideFlags: 0
